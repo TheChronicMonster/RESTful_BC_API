@@ -49,7 +49,6 @@ class Blockchain {
                     // Block hash with SHA256 using newBlock and convert to string
                     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
                     // Store new block in database
-                    console.log("resolving to levelDBData else");
                     //levelDB.addLevelDBData(newBlock.height, JSON.stringify(newBlock).toString());
                     levelDB.addLevelDBData(height, newBlock);
                     res(JSON.stringify(newBlock));
