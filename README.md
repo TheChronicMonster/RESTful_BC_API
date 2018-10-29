@@ -28,7 +28,7 @@ POSTMAN
 
 1. Open POSTMAN
 
-2. Select GET and enter http://localhost:8000/block/{index} into the URL where {index} is the block number. The Genesis block can be found at index -1.
+2. Select GET and enter http://localhost:8000/block/{index} into the URL where {index} is the block number. The Genesis block can be found at index -1. (The block index is always one number less than the actual block height).
 
 CURL
 

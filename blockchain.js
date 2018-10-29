@@ -133,10 +133,16 @@ class Blockchain {
 // Used to create POST requests with Node/Express Endpoints
 let POSTBlockHelper = (body) => blockchain.addBlock(new Block(body.toString()));
 
+// I know this is DRY, bad coding practice, but had a difficult time getting routes.js to recognize blockchain.getBlock as a function.
+// Reviewer advice in overcoming that would be highly appreciated
+function getBlock2(blockHeight) {
+    return levelDB.getLevelDBData(blockHeight);
+};
+
 const blockchain = new Blockchain()
 
 module.exports.Blockchain = Blockchain;
-module.exports = {POSTBlockHelper};
+module.exports = {getBlock2, Blockchain, POSTBlockHelper};
 
 /* --------------------------------------- //
 // Use this to generate 10 blocks       //
@@ -148,7 +154,7 @@ module.exports = {POSTBlockHelper};
         let blockTest = new Block("Test Block");
         blockchain.addBlock(blockTest)
             i++;
-            if (i < 5) theLoop(i);
+            if (i < 1) theLoop(i);
     }, 900);
   })(0);
 */

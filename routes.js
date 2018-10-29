@@ -9,13 +9,24 @@ let appRouter = function(app) {
     app.get('/', function(req,res) {
         res.status(200).send("Private Blockchain home. To explore blocks, GET localhost:8000/block/{block #}");
     });
-
-    app.get("/block/:key", (req,res) => {
-        let key = req.params.key;
-        console.log("The key is " + key);
-        levelDB.getLevelDBData(key).then((data) => {
-            res.status(200).send(JSON.parse(data));
-        });
+    // Created with grateful assistance from Jose M
+    // https://knowledge.udacity.com/questions/10391
+    app.get("/block/:key", (req, res) => {
+        if (req.params.key) {
+            const key = req.params.key;
+            blockchain.getBlock2(key).then((block) => {
+                if (block) {
+                    // JSON.parse makes status reports pretty pretty pretty
+                    return res.status(200).send(JSON.parse(block));
+                } else {
+                    return res.status(404).send("Block does not exist");
+                }
+            }).catch((error) => {
+                return res.status(500).send("Unknown error, please try again");
+            })
+        } else {
+            return res.status(404).send("Block does not exist");
+        }
     });
 
     app.post('/block', (req, res) => {
