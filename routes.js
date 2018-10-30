@@ -22,21 +22,21 @@ let appRouter = function(app) {
                     return res.status(400).send("Block does not exist");
                 }
             }).catch((error) => {
-                return res.status(404).send("Unknown error, please try again");
+                return res.status(404).send("Block does not exist");
             })
         } else {
-            return res.status(500).send("Block does not exist");
+            return res.status(500).send("Unknown error, please try again");
         }
     });
 
     app.post('/block', (req, res) => {
         let blockPOSTBodyRequest = req.body.body;
-        if (blockPOSTBodyRequest !== undefined) {
+        if (blockPOSTBodyRequest !== undefined && blockPOSTBodyRequest === "") {
             blockchain.POSTBlockHelper(blockPOSTBodyRequest).then((block) => {
                 res.status(201).send(JSON.parse(block));
             });
         } else {
-            return res.status(404).send("Cannot post without body value\n");
+            return res.status(404).send("Cannot post without string in body value\n");
         }
     });
 }
