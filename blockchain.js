@@ -18,7 +18,8 @@ class Blockchain {
     // Blockchain Constructor
     constructor() {
         this.getBlockHeight().then((height) => {
-            if (height === -1) {
+            // Create Genesis Block if block height is zero
+            if (height === 0) {
                 this.addBlock(new Block("Blockchain Initiated: Genesis Block"));
                 console.log("\nGenesis Block Created");
             }
@@ -31,13 +32,12 @@ class Blockchain {
             let self = this;
             this.getBlockHeight().then((height) => {
                 // Block height
-                newBlock.height = (height + 1);
+                newBlock.height = (height);
                 // UTC timestamp
                 newBlock.time = new Date().getTime().toString().slice(0, -3);
                 // Block hash with SHA256 using newBlock and convert to string
                 newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
                 if (newBlock.height > 0) {
-                    //levelDB.getLevelDBData(height, function(data) {
                     self.getBlock(height - 1).then((response) => {
                         newBlock.previousBlockHash = JSON.parse(response).hash;
                         // Store new block in database
@@ -65,7 +65,8 @@ class Blockchain {
     // Get Block Height
     getBlockHeight() {
         return new Promise((resolve, reject) => {
-            let height = -1;
+            // Begin block height at index 0
+            let height = 0;
             // CHANGE DB TO CHAINDB
             chainDBForLevelDBRef.createReadStream()
               .on('data', (data) => {
@@ -119,7 +120,7 @@ class Blockchain {
                     errorLog.push(i);
                 }
             }
-            if (errorLog.loength > 0) {
+            if (errorLog.length > 0) {
                 console.log('Block errors = ' + errorLog.length);
                 console.log('Blocks: ' + errorLog);
             } else {
@@ -132,7 +133,7 @@ class Blockchain {
 // Used to create POST requests with Node/Express Endpoints
 let POSTBlockHelper = (body) => blockchain.addBlock(new Block(body.toString()));
 
-// I know this is DRY, bad coding practice, but had a difficult time getting routes.js to recognize blockchain.getBlock as a function.
+// I know this violates DRY, bad coding practice, but had a difficult time getting routes.js to recognize blockchain.getBlock as a function.
 // Reviewer advice in overcoming that would be highly appreciated
 function getBlock2(blockHeight) {
     return levelDB.getLevelDBData(blockHeight);
@@ -147,13 +148,12 @@ module.exports = {getBlock2, Blockchain, POSTBlockHelper};
 // Use this to generate 10 blocks       //
 // --------------------------------------- */
 
-/*
+
 (function theLoop(i) {
     setTimeout(function() {
-        let blockTest = new Block("Test Block");
+        let blockTest = new Block("Test Block: " + i);
         blockchain.addBlock(blockTest)
             i++;
-            if (i < 1) theLoop(i);
+            if (i < 5) theLoop(i);
     }, 900);
   })(0);
-*/

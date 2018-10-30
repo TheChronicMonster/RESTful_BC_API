@@ -13,7 +13,7 @@ let appRouter = function(app) {
     // https://knowledge.udacity.com/questions/10391
     app.get("/block/:key", (req, res) => {
         if (req.params.key) {
-            const key = req.params.key;
+            const key = (req.params.key);
             blockchain.getBlock2(key).then((block) => {
                 if (block) {
                     // JSON.parse makes status reports pretty pretty pretty
@@ -31,9 +31,13 @@ let appRouter = function(app) {
 
     app.post('/block', (req, res) => {
         let blockPOSTBodyRequest = req.body.body;
-        blockchain.POSTBlockHelper(blockPOSTBodyRequest).then((block) => {
-            res.status(201).send(JSON.parse(block));
+        if (blockPOSTBodyRequest !== undefined) {
+            blockchain.POSTBlockHelper(blockPOSTBodyRequest).then((block) => {
+                res.status(201).send(JSON.parse(block));
             });
+        } else {
+            return res.status(404).send("Cannot post without body value\n");
+        }
     });
 }
 
