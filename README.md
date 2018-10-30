@@ -48,7 +48,9 @@ POSTMAN
 
 3. Select "Body" directly under the URL bar.
 
-4. Create an object with one key `body` and any value that is a string. i.e.
+4. Select "raw" directly under the "Body" selector.
+
+5. Create an object with one key `body` and any value that is a string. i.e.
 
 ```
 {
@@ -70,7 +72,7 @@ curl -X POST \
 
 #Errors
 
-Blocks are not added to the blockchain if the body does not contain a string.
+Blocks are not added to the blockchain if the body does not contain a string of at least one character.
 
 # Acknowledgements
 
