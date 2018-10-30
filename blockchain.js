@@ -77,7 +77,7 @@ class Blockchain {
               })
               .on('close', () => {
                   resolve(height);
-                  console.log("Current Block Height is: " +  height);
+                  //console.log("Current Block Height is: " +  height);
               });
         });
     }
