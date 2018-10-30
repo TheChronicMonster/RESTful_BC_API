@@ -151,7 +151,7 @@ module.exports = {getBlock2, Blockchain, POSTBlockHelper};
 
 (function theLoop(i) {
     setTimeout(function() {
-        let blockTest = new Block("Test Block: " + i);
+        let blockTest = new Block("Test Block");
         blockchain.addBlock(blockTest)
             i++;
             if (i < 5) theLoop(i);
