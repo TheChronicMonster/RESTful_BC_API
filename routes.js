@@ -19,24 +19,25 @@ let appRouter = function(app) {
                     // JSON.parse makes status reports pretty pretty pretty
                     return res.status(200).send(JSON.parse(block));
                 } else {
-                    return res.status(400).send("Block does not exist");
+                    return res.status(400).send({"status": 400, message: "Block does not exist"});
                 }
             }).catch((error) => {
-                return res.status(404).send("Block does not exist");
+                return res.status(404).send({"status": 404, message: "Block does not exist"});
             })
         } else {
-            return res.status(500).send("Unknown error, please try again");
+            return res.status(500).send({"status": 500, message: "Unknown error, please try again"});
         }
     });
 
     app.post('/block', (req, res) => {
         let blockPOSTBodyRequest = req.body.body;
-        if (blockPOSTBodyRequest !== undefined && blockPOSTBodyRequest === "") {
+        // Ensures that only strings with at least one character are posted to the blockchain
+        if (blockPOSTBodyRequest !== undefined && blockPOSTBodyRequest !== "" && typeof blockPOSTBodyRequest === 'string') {
             blockchain.POSTBlockHelper(blockPOSTBodyRequest).then((block) => {
                 res.status(201).send(JSON.parse(block));
             });
         } else {
-            return res.status(404).send("Cannot post without string in body value\n");
+            return res.status(404).send({"status": 404, message: "Cannot post without string in body value"});
         }
     });
 }
